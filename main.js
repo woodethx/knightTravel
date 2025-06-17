@@ -24,6 +24,36 @@ class Square{
 
 
 
-const square = new Square([6,6]);
-console.log(square.moves);
+function knightMoves(start, end) {
+    const key = ([x, y]) => `${x},${y}`;
+  
+    const visited = new Set([key(start)]);
+    const parent  = new Map(); 
+    const queue   = [new Square(start)];
+  
+    while (queue.length) {
+      const current = queue.shift();
+  
+      if (key(current.position) === key(end)) {
+        const path = [current.position];
+        while (parent.has(key(path[0]))) {
+          path.unshift(parent.get(key(path[0])));
+        }
+        return path;
+      }
+  
+      current.moves.forEach(move => {
+        const k = key(move);
+        if (!visited.has(k)) {
+          visited.add(k);
+          parent.set(k, current.position);
+          queue.push(new Square(move));
+        }
+      });
+    }
+  
+    return null; 
+  }
+
+console.log(knightMoves([3,3],[6,6]));
 
